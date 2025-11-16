@@ -134,6 +134,18 @@
       margin: 0;
       font-size: 14px;
     }
+    .videocard {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(2,10,23,0.08);
+      padding: 16px;
+      min-height: 240px;
+      max-width: 80%;
+      margin-left: auto;
+      margin-right: auto;
+      display: flex;
+      flex-direction: column;
+    }
     .meta-title {
       font-weight: 600;
       font-size: 15px;
@@ -225,6 +237,7 @@
     /* Responsive */
     @media (max-width:1000px){
       .split{grid-template-columns:1fr}
+      .videocard{max-width:100%}
       .splitleft{grid-template-columns:1fr}
       .team-grid{grid-template-columns:repeat(2,1fr)}
       .hero-inner{flex-direction:column;align-items:flex-start}
@@ -449,11 +462,11 @@
         </div>
       </div>
     </div>
-    <div class="card" style="margin-top:18px">
-      <iframe src="https://www.youtube.com/embed/pDafyuoCzkY?si=y3KrUUWtHOhyzfFG" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" style="max-width:100%; max-height:100%;border-radius:8px;"></iframe>
+    <div class="videocard" style="margin-top:18px;height:400px">
+      <iframe src="https://www.youtube.com/embed/pDafyuoCzkY?si=y3KrUUWtHOhyzfFG" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" style="height:100%;width:auto;border-radius:8px;"></iframe>
     </div>
 
-    <h2>Partners and Sponsors</h2>
+    <h2 style="margin-top:12px;">Partners and Sponsors</h2>
     <div class="gridpartner" role="list">
         <div class="partner">
           <img src="./images/nserc.png">
