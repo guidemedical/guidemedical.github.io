@@ -1,0 +1,932 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Guide Medical</title>
+  <meta name="description" content="Accessible expert ultrasound." />
+  <meta name="theme-color" content="#0B6E4F" />
+
+  <style>
+    :root{
+      --accent:#00245c;
+      --accent-2:#0f4ea8;
+      --muted:#667085;
+      --bg:#f6fbff;
+      --card:#ffffff;
+      --radius:18px;
+      --glass:rgba(255,255,255,0.55);
+      --shadow:0 12px 40px rgba(2,10,23,0.12);
+      --max-width:1300px;
+      --nav-height:72px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color:#071227;
+      background:linear-gradient(180deg,#f3f8ff 0%,var(--bg) 100%);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.5;
+      scroll-behavior:smooth;
+      overflow-x:hidden;
+    }
+
+    .container{width:100%;max-width:var(--max-width);margin:0 auto;padding:28px 20px}
+
+    header{height:var(--nav-height);display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .brand{display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit}
+    .logo{width:112px;height:64px;border-radius:12px;overflow:hidden;flex:0 0 112px}
+    .brand h1{font-size:18px;margin:0}
+    .brand p{margin:0;font-size:12px;color:var(--muted)}
+
+    nav{display:flex;gap:18px;align-items:center}
+    nav a{font-size:15px;color:var(--muted);text-decoration:none;padding:10px;border-radius:10px}
+    nav a:hover{color:var(--accent)}
+    .cta{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:white;padding:10px 14px;border-radius:12px}
+
+    /* Hero cinematic full-bleed height: 64vh;min-height:520px;*/
+    .hero-wrap{position:relative;height:50vh;min-height:420px;display:block}
+    .hero{position:relative;height:100%;display:flex;align-items:center}
+
+    /* Parallax layers */
+    .parallax-layer{position:absolute;left:0;right:0;top:0;bottom:0;will-change:transform,opacity}
+    .layer.bg{background:linear-gradient(120deg, rgba(3,16,46,0.9) 0%, rgba(6,34,75,0.75) 60%);mix-blend-mode:normal}
+    .layer.gradient{
+      background:radial-gradient(60% 40% at 20% 30%, rgba(10,78,190,0.18), transparent 20%), radial-gradient(40% 30% at 80% 70%, rgba(6,150,200,0.12), transparent 15%);
+      filter:blur(40px);
+      opacity:0.95
+    }
+    .layer.texture{background-image:url('https://images.unsplash.com/photo-1534751516642-a1af1ef0b5f9?auto=format&fit=crop&w=1600&q=60');background-size:cover;background-position:center;opacity:0.06;filter:grayscale(40%) blur(2px)}
+
+    /* SVG line art layer right:-6%;top:8%;width:64%;height:84%;*/
+    .layer.svg {pointer-events:none;}
+    .svg-art{position:absolute;right:-4%;top:8%;width:94%;height:100%;opacity:0.9}
+
+    .hero-inner{position:relative;z-index:22;display:flex;align-items:center;gap:40px;padding:28px;max-width:1200px;margin:0 auto}
+    .hero-copy{flex:1;color:white;max-width:780px}
+    .eyebrow{display:inline-block;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.95);font-weight:600;font-size:13px}
+    .small-logo{width:100px;height:56px;border-radius:12px;overflow:hidden;flex:0 0 100px}
+    h1.hero-title{font-size:48px;line-height:1.02;margin:18px 0 12px;text-shadow:0 6px 30px rgba(2,10,23,0.45)}
+    p.hero-lead{font-size:18px;color:rgba(255,255,255,0.86);margin:0 0 18px}
+    .hero-cta{display:flex;gap:12px}
+    .btn{padding:12px 18px;border-radius:12px;border:0;font-weight:700;cursor:pointer}
+    .btn--solid{background:white;color:var(--accent)}
+    .btn--ghost{background:transparent;border:1px solid rgba(255,255,255,0.14);color:white}
+
+    /* Info card on right */
+    .hero-card{flex:0 0 360px;background:linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.04));backdrop-filter:blur(6px);border-radius:16px;padding:18px;box-shadow:0 10px 30px rgba(2,10,23,0.3);border:1px solid rgba(255,255,255,0.06);color:white}
+    .hero-card h3{margin:0 0 8px}
+    .hero-card label{display:block;font-size:13px;color:rgba(255,255,255,0.9);margin-bottom:6px}
+    .hero-card input{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:white}
+
+    /* Sections */
+    section{padding:80px 20px;max-width:1000px;margin:0 auto}
+    section h2{font-size:32px;margin:0 0 12px}
+    section p{color:var(--muted);max-width:1000px}
+    section img{max-width:100%;max-height:100%;object-position:center;}
+
+    .panel{border-radius:14px;overflow:hidden;box-shadow:var(--shadow);background:white}
+    .panel--media{height:420px;display: flex;justify-content: center;align-items: center;}
+
+    /* Split layout */
+    .split{display:grid;grid-template-columns:1fr 420px;gap:32px;align-items:center}
+    .splitleft{display:grid;grid-template-columns:1fr 500px;gap:32px;align-items:center}
+    .team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px}
+    .member{background:white;padding:14px;border-radius:12px;box-shadow:0 8px 24px rgba(2,10,23,0.06);text-align:center}
+
+    .hscroll-panel {
+      overflow-x: auto;
+      padding-bottom: 10px;
+      scrollbar-width: thin;
+    }
+    .hscroll-inner {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(260px, 1fr);
+      gap: 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(2,10,23,0.08);
+      padding: 16px;
+      min-height: 240px;
+      display: flex;
+      flex-direction: column;
+    }
+    .card img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+    .card p {
+      color: #667085;
+      margin: 0;
+      font-size: 14px;
+    }
+    .meta-title {
+      font-weight: 600;
+      font-size: 15px;
+      margin-bottom: 6px;
+      color: #1a1a1a;
+    }
+    .meta-authors {
+      font-size: 13px;
+      color: #555;
+      margin-bottom: 4px;
+    }
+    .meta-venue {
+      font-size: 13px;
+      font-style: italic;
+      color: #777;
+    }
+
+    /* Optional: smooth snapping */
+    .hscroll-panel {
+      scroll-snap-type: x mandatory;
+    }
+    .card {
+      scroll-snap-align: start;
+    }
+    .logo-panel{border-radius:14px;overflow:hidden;}
+    .logo-panel-small{border-radius:14px;overflow:hidden;display:none}
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+      gap:10px;
+      align-items:stretch;
+    }
+    .gridpartner{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+      gap:10px;
+      align-items:stretch;
+    }
+    .mediacard{
+      position:relative;
+      border-radius:var(--radius);
+      overflow:hidden;
+      background:linear-gradient(180deg, #fff 0%, #fafafa 100%);
+      box-shadow:var(--shadow);
+      transition:transform .18s ease, box-shadow .18s ease;
+    }
+    /* Make the whole mediacard focusable when anchor inside gets focus */
+    .mediacard a{display:block;text-decoration:none;color:inherit}
+    .mediacard:focus-within{outline:3px solid rgba(59,130,246,0.25);outline-offset:3px}
+    .mediacard img{
+      max-width:100%;
+      height:160px;
+      margin-left:auto;
+      margin-right:auto;
+      object-fit:contain;
+      display:block;
+      transition:transform .35s ease;
+    }
+    .mediacard:hover{transform:translateY(-6px);box-shadow:0 12px 28px rgba(0,0,0,0.16)}
+    .mediacard:hover img{transform:scale(1.06)}
+    .caption{
+      padding:.6rem .75rem;
+      font-size:.95rem;
+      display:flex;align-items:center;justify-content:space-between;
+    }
+    .caption .title{font-weight:600}
+    .meta{font-size:.85rem;color:#555}
+    .partner{
+      position:relative;
+    }
+    .partner img{
+      max-width:100%;
+      height:100px;
+      margin-left:auto;
+      margin-right:auto;
+      margin-bottom:10px;
+      object-fit:contain;
+      display:block;
+    }
+
+    /* Fade-in util */
+    .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.9,.2,1)}
+    .reveal.visible{opacity:1;transform:none}
+
+    /* Footer */
+    footer.site{padding:40px 20px;border-top:1px solid rgba(2,10,23,0.04);color:var(--muted);display:flex;justify-content:space-between;align-items:center}
+
+    /* Responsive */
+    @media (max-width:1000px){
+      .split{grid-template-columns:1fr}
+      .splitleft{grid-template-columns:1fr}
+      .team-grid{grid-template-columns:repeat(2,1fr)}
+      .hero-inner{flex-direction:column;align-items:flex-start}
+      .hero-card{width:100%}
+      .logo-panel{display: none;}
+      .logo-panel-small{display:block;}
+      .mediacard img{height:200px}
+      h1.hero-title{font-size:36px}
+    }
+
+    @media (max-width:600px){
+      header{padding:10px}
+      .logo{width:110px;height:60px}
+      h1.hero-title{font-size:28px}
+    }
+
+    /* Mobile Navigation Styles */
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 28px;
+      cursor: pointer;
+      margin-left: auto;
+    }
+
+    @media (max-width: 750px) {
+      header nav.nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 70px;
+        right: 20px;
+        background: white;
+        padding: 15px 20px;
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        z-index: 999;
+      }
+      body.menu-open header nav.nav-links {
+        display: flex;
+      }
+
+      .nav-toggle {
+        display: block;
+      }
+    }
+
+    /* Slide-down animation for mobile nav */
+    @media (max-width: 750px) {
+      header nav.nav-links {
+        overflow: hidden;
+        max-height: 0;
+        opacity: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        transition: max-height 0.25s ease, opacity 0.25s ease, padding 0.25s ease;
+      }
+      body.menu-open header nav.nav-links {
+        max-height: 500px;
+        opacity: 1;
+        padding-top: 15px;
+        padding-bottom: 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="container">
+    <a class="brand" href="#">
+      <div class="logo"><img src="./images/logoText.png" alt="Guide Medical logo" style="width:100%;height:100%;object-fit:contain;"/></div>
+    </a>
+
+    <button class="nav-toggle" aria-label="Toggle menu" onclick="document.body.classList.toggle('menu-open')">☰</button>
+
+    <nav class="nav-links">
+      <a href="#issue">The Issue</a>
+      <a href="#solution">Solution</a>
+      <a href="#team">Team</a>
+      <a href="#research">Research</a>
+      <a href="#media">Media</a>
+      <a class="cta" href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <!-- HERO with parallax layers + SVG line art -->
+  <div class="hero-wrap" id="top">
+    <div class="parallax-layer layer bg" data-speed="0.12"></div>
+    <div class="parallax-layer layer texture" data-speed="0.06"></div>
+    <div class="parallax-layer layer gradient" data-speed="0.2"></div>
+
+    <div class="parallax-layer layer svg" data-speed="0.35" aria-hidden="true">
+      <!-- Custom SVG line-art (abstract medical waveform + nodes) -->
+      <svg class="svg-art" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="g1" x1="0" x2="1">
+            <stop offset="0%" stop-color="#7fc7ff" stop-opacity="0.95"/>
+            <stop offset="100%" stop-color="#9fe0ff" stop-opacity="0.7"/>
+          </linearGradient>
+          <filter id="f1" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="18" result="b"/>
+            <feBlend in="SourceGraphic" in2="b" mode="screen"/>
+          </filter>
+        </defs>
+
+        <g filter="url(#f1)">
+          <path d="M20 420 C160 320, 320 240, 480 260 C640 280, 720 340, 900 300 C1040 270, 1140 200, 1180 160" fill="none" stroke="url(#g1)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity="0.95"/>
+          <circle cx="480" cy="260" r="10" fill="#fff" stroke="#7fc7ff" stroke-width="3"/>
+          <circle cx="900" cy="300" r="8" fill="#fff" stroke="#9fe0ff" stroke-width="2"/>
+
+          <!-- network nodes -->
+          <g opacity="0.85">
+            <circle cx="120" cy="180" r="6" fill="#9fe0ff"/>
+            <circle cx="220" cy="240" r="5" fill="#7fc7ff"/>
+            <circle cx="340" cy="200" r="4" fill="#bfe9ff"/>
+            <path d="M120 180 L220 240 L340 200" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" fill="none"/>
+          </g>
+
+          <!-- subtle dots field -->
+          <g opacity="0.22" fill="#cfeeff">
+            <circle cx="780" cy="120" r="3"/>
+            <circle cx="840" cy="180" r="2"/>
+            <circle cx="980" cy="80" r="2.5"/>
+            <circle cx="680" cy="60" r="3"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <div class="hero">
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <!--<span class="eyebrow"><div class="small-logo"><img src="./images/logoText.png" alt="Guide Medical logo" style="width:100%;height:100%;object-fit:contain;"/></div></span>-->
+          <h1 class="hero-title">Accessible expert ultrasound, anywhere.</h1>
+          <p class="hero-lead">Bring expert ultrasound imaging and diagnostics to rural communities and other remote settings through our patent-pending mixed reality system without anyone needing to travel.</p>
+
+          <div class="hero-cta">
+            <button class="btn btn--solid" onclick="window.location.href='#solution'">The Solution</button>
+            <button class="btn btn--ghost" onclick="window.location.href='#research'">Our Research</button>
+            <div class="logo-panel-small">
+              <img src="./images/logo.png" style="width:40px;"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="logo-panel">
+          <img src="./images/logo.png" style="width:200px;"/>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENT SECTIONS WITH PARALLAX MEDIA PANELS -->
+  <section id="issue" class="reveal">
+    <h2>The Issue</h2>
+    <p>Diagnostic ultrasound is used in every branch of medicine, yet rural communities have little to no access. This impacts about 1 in 5 people globally. The only practical solution used today is for patients to travel for scans. This means time away from work and family, facing the risks of travel and the environmental impact, and it costs healthcare systems billions of dollars per year. The tele-ultrasound market is estimated to be worth $100 billion (USD), but current solutions do not solve the problem. Video guidance is too ineffective and imprecise while robotics is too complex, expensive, and inflexible.</p>
+    <!-- <div class="panel panel--media" style="margin-top:18px;background-image:linear-gradient(120deg, rgba(2,18,45,0.08), rgba(6,34,75,0.04)), url('./images/coverImg.png')"></div> -->
+    <div class="panel panel--media" style="margin-top:18px">
+      <img src="./images/coverImg.png" style="max-height:100%;max-width:100%;border-radius:8px;"/>
+    </div>
+  </section>
+
+  <section id="solution" class="reveal">
+    <h2>Solution</h2>
+    <p>Guide Medical is addressing the problem of ultrasound access by enabling expert ultrasound guidance in remote communities. Our system bridges the gap between robotics and video guidance, providing a solution that is simultaneously easy-to-use, low-cost, and flexible, while giving the physician precise control and immersive feedback.</p>
+    <p>We use a patent-pending combination of real-time hand-over-hand augmented reality guidance with high-speed communication and force feedback to give the expert the sensation of performing a scan in person while in fact they are guiding the motions of a novice person in a remote location.</p>
+    <p>Our approach is based on hundreds of conversations with physicians, health authorities, remote and Indigenous communities, and industry experts, and has been validating in award-winning published research.</p>
+    <div class="split" style="margin-top:18px">
+      <div>
+        <div class="panel" style="padding:22px">
+          <h3>At a glance</h3>
+          <p>The novice person wears a mixed reality headset and aligns their real ultrasound probe with a virtual one. The motion of the virtual one is controlled in real time by a remote expert, who manipulates a haptic input device. They see the live-streamed video and ultrasound, communicate verbally with the novice, and receive force feedback through the haptic device so it feels as if they are performing the scan in person.</p>
+          <ul>
+            <li>Cloud interface:</li>
+            <ul>
+              <li>Secure, robust, end-to-end encrypted, ultra-fast, peer-to-peer connection between expert and follower</li>
+              <li>Two-way verbal communication</li>
+              <li>High-quality, low-latency video and ultrasound streaming</li>
+              <li>Advanced teleoperation algorithms</li>
+            </ul>
+            <li>Expert-side interface:</li>
+            <ul>
+              <li>High definition video and ultrasound streams</li>
+              <li>Device-agnostic remote control of the ultrasound machine settings</li>
+              <li>Input device with ultrasound probe-like handle for sub-millimeter, sub-degree precision 6 degree-of-freedom input and realistic force feedback</li>
+            </ul>
+            <li>Patient-side system:</li>
+            <ul>
+              <li>Compellingly intuitive mixed reality guidance system</li>
+              <li>Integrated transducer force, position, and orientation tracking and feedback</li>
+              <li>Patient specific modeling and feedback</li>
+              <li>AI assistance</li>
+            </ul>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="panel panel--media">
+          <img src="./images/followerSide.png" style="max-height:100%;max-width:100%;border-radius:8px;"/>
+        </div>
+      </div>
+    </div>
+    <div class="splitleft" style="margin-top:18px">
+      <div>
+        <div class="panel" style="padding:22px">
+          <h3>Key benefits</h3>
+          <ul>
+            <li>Intuitive and easy to use for expert and novice</li>
+            <li>Precise, real-time guidance for an efficient, high-quality scan</li>
+            <li>Easy, fast setup (less than 1 minute)</li>
+            <li>Completely flexible and mobile (one pair of smart glasses and a tablet)</li>
+            <li>Ultrasound probe agnostic for most point-of-care devices</li>
+            <li>No robot-related safety concerns</li>
+            <li>Massive cost savings compared to travel or robotics</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="panel panel--media">
+          <img src="./images/expertSide.png" style="max-height:100%;max-width:100%;border-radius:8px;"/>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:18px">
+      <iframe src="https://www.youtube.com/embed/pDafyuoCzkY?si=y3KrUUWtHOhyzfFG" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" style="max-width:100%; max-height:100%;border-radius:8px;"></iframe>
+    </div>
+
+    <h2>Partners and Sponsors</h2>
+    <div class="gridpartner" role="list">
+        <div class="partner">
+          <img src="./images/nserc.png">
+        </div>
+        <div class="partner">
+          <img src="./images/mitacs.webp">
+        </div>
+        <div class="partner">
+          <img src="./images/ubc.png">
+        </div>
+        <div class="partner">
+          <img src="./images/rogers.png">
+        </div>
+        <div class="partner">
+          <img src="./images/icics.png">
+        </div>
+        <div class="partner">
+          <img src="./images/skidegate.png">
+        </div>
+        <div class="partner">
+          <img src="./images/vanier.png">
+        </div>
+        <div class="partner">
+          <img src="./images/vchri.png">
+        </div>
+    </div>
+  </section>
+
+  <section id="team" class="reveal">
+    <h2>Team</h2>
+    <p>We are scientists and engineers with deep expertise in medical imaging, teleoperation, and mixed reality and a shared vision to improve health equity.</p>
+    <div class="team-grid" style="margin-top:18px">
+      <div class="member">
+        <img src="./images/david.jpg" style="width:100%;height:280px;object-fit:cover;border-radius:8px;margin-bottom:10px"/>
+        <strong>Dr. David Black</strong>
+        <div class="muted">Technical Lead</div>
+        <div>
+          <a href="https://www.linkedin.com/in/davidgblack" target="_blank">
+            <img src="./images/linkedin.svg" alt="LinkedIn Link" style="width:20%;opacity: 0.6;margin-top: 4px;">
+          </a>
+        </div>
+      </div>
+      <div class="member">
+        <img src="./images/tim.jpg" style="width:100%;height:280px;object-fit:cover;border-radius:8px;margin-bottom:10px"/>
+        <strong>Professor Tim Salcudean</strong>
+        <div class="muted">Scientific Lead</div>
+        <div>
+          <a href="https://www.linkedin.com/in/tim-salcudean/" target="_blank">
+            <img src="./images/linkedin.svg" alt="LinkedIn Link" style="width:20%;opacity: 0.6;margin-top: 4px;">
+          </a>
+        </div>
+      </div>
+      <div class="member">
+        <img src="./images/qi.jpg" style="width:100%;height:280px;object-fit:cover;border-radius:8px;margin-bottom:10px"/>
+        <strong>Dr. Qi Zeng</strong>
+        <div class="muted">AI & Ultrasound Lead</div>
+        <div>
+          <a href="https://www.linkedin.com/in/qi-zeng-a1076886/" target="_blank">
+            <img src="./images/linkedin.svg" alt="LinkedIn Link" style="width:20%;opacity: 0.6;margin-top: 4px;">
+          </a>
+        </div>
+      </div>
+      <div class="member">
+        <img src="./images/valentina.jpg" style="width:100%;height:280px;object-fit:cover;border-radius:8px;margin-bottom:10px"/>
+        <strong>Valentina Toro Chinchilla</strong>
+        <div class="muted">Business Lead</div>
+        <div>
+          <a href="https://www.linkedin.com/in/valentina-toro-chinchilla/" target="_blank">
+            <img src="./images/linkedin.svg" alt="LinkedIn Link" style="width:20%;opacity: 0.6;margin-top: 4px;">
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="research" class="reveal">
+    <h2>Research</h2>
+    <p>This venture was born in the Robotics and Control Laboratory at the University of British Columbia, Vancouver, Canada. We are carrying out extensive research on the technical system, instrumentation, control, human-computer interaction, vision, clinical feasibility, and more.</p>
+    <h3>Papers:</h3>
+    <div class="hscroll-panel">
+      <div class="hscroll-inner">
+        <div class="card">
+          <h3>Human Teleoperation Dissertation</h3>
+          <a href="https://dx.doi.org/10.14288/1.0448301" target="_blank">
+            <img src="./images/generalDiagram.JPG" alt="Human Teleoperation System" loading="lazy" />
+          </a>
+          <div class="meta">
+            <div class="meta-title">Bilateral human teleoperation : a mixed reality system for remote ultrasound</div>
+            <div class="meta-authors">David G. Black</div>
+            <div class="meta-venue">PhD Dissertation</div>
+          </div>
+        </div>
+
+        <!-- Human Teleoperation (preprint / HCI) -->
+        <div class="card">
+          <h3>Human Teleoperation</h3>
+          <a href="https://doi.org/10.1080/07370024.2023.2218355" target="_blank">
+            <img src="./images/hci2023.png" alt="Human Teleoperation System" loading="lazy" />
+          </a>
+          <div class="meta">
+            <div class="meta-title">Human Teleoperation - a Haptically-Enabled Mixed Reality System for Tele-Ultrasound</div>
+            <div class="meta-authors">David G. Black, Yas O. Yazdi, Amir H. H. Hosseinabadi, Septimiu E. Salcudean</div>
+            <div class="meta-venue">Human-Computer Interaction (2023)</div>
+          </div>
+        </div>
+
+        <!-- Mixed Reality Tele-US (Computers & Graphics) -->
+        <div class="card">
+          <h3>Remote Ultrasound Control</h3>
+          <a href="https://www.sciencedirect.com/science/article/pii/S0097849324000037" target="_blank">
+            <img src="./images/cagFig.png" alt="Mixed Reality Tele-US" loading="lazy" />
+          </a>
+          <div class="meta">
+            <div class="meta-title">Mixed Reality Human Teleoperation with Device-Agnostic Remote Ultrasound: Communication and User Interaction</div>
+            <div class="meta-authors">David G. Black, Mika Nogami, Septimiu E. Salcudean</div>
+            <div class="meta-venue">Computers & Graphics, Vol. 118 (2024)</div>
+          </div>
+        </div>
+
+        <!-- Clinical Study over Distance -->
+        <div class="card">
+          <h3>Pilot Study in Haida Gwaii</h3>
+          <a href="https://arxiv.org/abs/2502.07922" target="_blank">
+            <img src="./images/haidaFig.jpg" alt="750 km tele-ultrasound clinical study" loading="lazy" />
+          </a>
+          <div class="meta">
+            <div class="meta-title">Mixed Reality Tele-Ultrasound over 750 km: A Clinical Study</div>
+            <div class="meta-authors">Ryan Yeung, David G. Black, Patrick Chen, Vickie Lessoway, Jan Reid, Sergio Rangel-Suarez, Silvia Chang, Septimiu E. Salcudean</div>
+            <div class="meta-venue">IEEE International Conference on Telepresence, Leiden (2025)</div>
+          </div>
+        </div>
+
+        <!-- Latency Evaluation -->
+        <div class="card">
+          <h3>Communication</h3>
+          <a href="https://ieeexplore.ieee.org/abstract/document/10380799" target="_blank">
+            <img src="./images/commFig.png" alt="Latency Evaluation" loading="lazy" />
+          </a>
+          <div class="meta">
+            <div class="meta-title">Evaluation of Communication and Human Response Latency for (Human) Teleoperation</div>
+            <div class="meta-authors">David G. Black, Dragan Andjelic, Septimiu E. Salcudean</div>
+            <div class="meta-venue">IEEE Transactions on Medical Robotics & Bionics (2024)</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Human vs. Robotic Teleoperation</h3>
+          <a href="https://ieeexplore.ieee.org/abstract/document/10380799" target="_blank">
+            <img src="./images/robotFig.png" alt="Latency Evaluation" loading="lazy" />
+          </a>
+          <div class="meta">
+            <div class="meta-title">Robotic versus Human Teleoperation for Remote Ultrasound</div>
+            <div class="meta-authors">David G. Black, Septimiu E. Salcudean</div>
+            <div class="meta-venue">Hamlyn Symposium for Medical Robotics (2025)</div>
+          </div>
+        </div>
+
+        <!-- Human-as-Robot Performance -->
+        <div class="card">
+          <h3>Novice Performance</h3>
+          <a href="https://link.springer.com/article/10.1007/s11548-023-02896-0" target="_blank">
+            <img src="images/trackingTimeDelay.jpg" alt="Human-as-robot performance" loading="lazy" />
+          </a>
+          <div class="meta">
+            <div class="meta-title">Human-as-a-Robot Performance in Augmented Reality Tele-Ultrasound</div>
+            <div class="meta-authors">David G. Black, Hamid Moradi, Septimiu E. Salcudean</div>
+            <div class="meta-venue">International Journal of Computer Assisted Radiology & Surgery (2023)</div>
+          </div>
+        </div>
+
+        <!-- Stability / Transparency -->
+        <div class="card">
+          <h3>Bilateral Human Teleoperation</h3>
+          <a href="https://ieeexplore.ieee.org/abstract/document/11176126" target="_blank">
+            <img src="images/teleop.png" alt="Stability and transparency in human teleoperation" loading="lazy" />
+          </a>
+          <div class="meta">
+            <div class="meta-title">Stability and Transparency in Mixed Reality Bilateral Human Teleoperation</div>
+            <div class="meta-authors">David G. Black, Septimiu E. Salcudean</div>
+            <div class="meta-venue">IEEE Transactions on Robotics (2025)</div>
+          </div>
+        </div>
+
+        <!-- Model-Mediated Teleoperation -->
+        <div class="card">
+          <h3>Model-Mediated Teleoperation</h3>
+          <a href="https://arxiv.org/abs/2502.07922" target="_blank">
+            <img src="images/mmt.jpg" alt="Model mediated teleoperation" loading="lazy" />
+          </a>
+          <div class="meta">
+            <div class="meta-title">Visual-Haptic Model-Mediated Teleoperation for Ultrasound</div>
+            <div class="meta-authors">David G. Black, Maria Tirindelli, Septimiu E. Salcudean, Wolfgang Wein, Marco Esposito</div>
+            <div class="meta-venue">IEEE Conference on Intelligent Robots and Systems (IROS), Hangzhou (2025)</div>
+          </div>
+        </div>
+
+        <!-- Linearity / Passivity -->
+        <div class="card">
+          <h3>Linearity & Passivity of the Novice</h3>
+          <a href="https://arxiv.org/abs/2504.11653" target="_blank">
+            <img src="images/linearityPaper.png" alt="Linearity and passivity in human teleoperation" loading="lazy" />
+          </a>
+          <div class="meta">
+            <div class="meta-title">Linearity, Time Invariance, and Passivity of a Novice Person in Human Teleoperation</div>
+            <div class="meta-authors">David G. Black, Septimiu E. Salcudean</div>
+            <div class="meta-venue">IEEE Transactions on Robotics (submitted, 2025)</div>
+          </div>
+        </div>
+
+        <!-- Linearity / Passivity --> 
+        <div class="card">
+          <h3>Model Based Haptics</h3>
+          <a href="https://arxiv.org/abs/2509.15325" target="_blank">
+            <img src="images/icraFig.png" alt="Linearity and passivity in human teleoperation" loading="lazy" />
+          </a>
+          <div class="meta">
+            <div class="meta-title">Measurement and Potential Field-Based Patient Modeling for Model-Mediated Tele-ultrasound</div>
+            <div class="meta-authors">Ryan S. Yeung, David G. Black, Septimiu E. Salcudean</div>
+            <div class="meta-venue">IEEE International Conference on Robotics and Automation (Submitted 2025)</div>
+          </div>
+        </div>
+
+        <!-- Force Sensing 6-Axis -->
+        <div class="card">
+          <h3>Force Sensing</h3>
+          <a href="https://ieeexplore.ieee.org/abstract/document/10542375" target="_blank">
+            <img src="images/tmrbFig.jpg" alt="6-axis force sensing" loading="lazy" />
+          </a>
+          <div class="meta">
+            <div class="meta-title">Low-Profile 6-Axis Differential Magnetic Force/Torque Sensing</div>
+            <div class="meta-authors">David G. Black, Amir H. H. Hosseinabadi, Mika Nogami, Nicholas Rangga, Septimiu E. Salcudean</div>
+            <div class="meta-venue">IEEE Transactions on Medical Robotics & Bionics (2024)</div>
+          </div>
+        </div>
+
+        <!-- Force Sensing (Conference) -->
+        <div class="card">
+          <h3>Force Sensing</h3>
+          <a href="https://ieeexplore.ieee.org/abstract/document/10224473" target="_blank">
+            <img src="images/whcFig.jpg" alt="Differential magnetic sensing" loading="lazy" />
+          </a>
+          <div class="meta">
+            <div class="meta-title">Towards Differential Magnetic Force Sensing for Ultrasound Teleoperation</div>
+            <div class="meta-authors">David G. Black, Amir H. H. Hosseinabadi, Mika Nogami, Maxime Pol, Nicholas Rangga, Septimiu E. Salcudean</div>
+            <div class="meta-venue">IEEE World Haptics Conference, Delft (2023)</div>
+          </div>
+        </div>
+
+        <!-- Pose Tracking -->
+        <div class="card">
+          <h3>Probe Pose Tracking</h3>
+          <a href="https://ieeexplore.ieee.org/abstract/document/10522652" target="_blank">
+            <img src="images/tracked.jpg" alt="Pose tracking for AR" loading="lazy" />
+          </a>
+          <div class="meta">
+            <div class="meta-title">Robust Object Pose Tracking for Augmented Reality Guidance and Teleoperation</div>
+            <div class="meta-authors">David G. Black, Septimiu E. Salcudean</div>
+            <div class="meta-venue">IEEE Transactions on Instrumentation & Measurement (2024)</div>
+          </div>
+        </div>
+
+        <!-- VR Tele-US Conference -->
+        <div class="card">
+          <h3>Mixed Reality Interface</h3>
+          <a href="https://ieeexplore.ieee.org/abstract/document/10108864" target="_blank">
+            <img src="images/followerSide.png" alt="Mixed Reality Tele-US VR" loading="lazy" />
+          </a>
+          <div class="meta">
+            <div class="meta-title">Mixed Reality Human Teleoperation</div>
+            <div class="meta-authors">David G. Black, Septimiu E. Salcudean</div>
+            <div class="meta-venue">IEEE VR (2023)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Awards:</h3>
+    <div class="hscroll-panel">
+      <div class="hscroll-inner">
+        <div class="card">
+          <h3>Mitacs Outstanding Innovation Award</h3>
+          <img src="./images/mitacsAward.jpg" alt="Human Teleoperation Mixed Reality system" loading="lazy" />
+          <div class="meta">
+            <div class="meta-title">Mitacs</div>
+            <div class="meta-authors">2024</div>
+            <div class="meta-venue">Prestigious award given to the most innovative of the thousands of projects funded by Mitacs in 2024</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Dean's Award for Best PhD Thesis</h3>
+          <img src="images/thesis.png" alt="Human Teleoperation Mixed Reality system" loading="lazy" />
+          <div class="meta">
+            <div class="meta-title">University of British Columbia</div>
+            <div class="meta-authors">2025</div>
+            <div class="meta-venue">Awarded for the best dissertation in engineering.</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Best Student Paper Award</h3>
+          <img src="./images/telepresenceAward.png" alt="Human Teleoperation Mixed Reality system" loading="lazy" />
+          <div class="meta">
+            <div class="meta-title">IEEE International Conference on Telepresence</div>
+            <div class="meta-authors">2025</div>
+            <div class="meta-venue">Given to the best paper presented by a graduate student</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Best Presentation Award</h3>
+          <img src="./images/hamlynAward.jpg" alt="Human Teleoperation Mixed Reality system" loading="lazy" />
+          <div class="meta">
+            <div class="meta-title">Hamlyn Symposium for Medical Robotics</div>
+            <div class="meta-authors">2022</div>
+            <div class="meta-venue">Awarded for the best paper and presentation. Imperial College, London</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Technical Achievment Award</h3>
+          <img src="./images/mddc.png" alt="Human Teleoperation Mixed Reality system"/>
+          <div class="meta">
+            <div class="meta-title">BC Medical Device Design Centre</div>
+            <div class="meta-authors">2021</div>
+            <div class="meta-venue">Awarded after presentations to judges at the BC MDDC</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <h3>Patents:</h3>
+    <ul>
+      <li><a href=https://patents.google.com/patent/US20230218270A1/en target="_blank" style="color:black">US20230218270A1</a></li>
+      <li><a href=https://patents.google.com/patent/US20240173018A1/en target="_blank" style="color:black">US20240173018A1</a></li>
+    </ul>
+  </section>
+
+  <section id="media" class="reveal">
+    <h2>Media Coverage</h2>
+    <div class="grid" role="list">
+      <div class="partner">
+        <a href="https://www.cbc.ca/player/play/video/9.6573580" target="_blank" rel="noopener noreferrer" aria-label="Open CBC news in a new tab">
+          <img src="./images/cbc.png" alt="CBC" loading="lazy">
+        </a>
+      </div>
+      <div class="partner">
+        <a href="https://globalnews.ca/news/10949371/bc-researchers-new-technology-remote-ultrasounds/" target="_blank" rel="noopener noreferrer" aria-label="Open Global News in a new tab">
+          <img src="./images/global.png" alt="Global News" loading="lazy">
+        </a>
+      </div>
+
+      <div class="partner">
+        <a href="https://www.youtube.com/watch?si=iKS7GRrWhVgW9qmq&v=0LxiADm_ka4&feature=youtu.be" target="_blank" rel="noopener noreferrer" aria-label="Open CTV News in a new tab">
+          <img src="./images/ctv.png" alt="CTV News" loading="lazy">
+        </a>
+      </div>
+
+      <div class="partner">
+        <a href="https://thetyee.ca/News/2024/11/26/UBC-Student-Awarded-Remote-Ultrasound/" target="_blank" rel="noopener noreferrer" aria-label="Open The Tyee in a new tab">
+          <img src="./images/tyee.png" alt="The Tyee" loading="lazy">
+        </a>
+      </div>
+
+      <div class="partner">
+        <a href="https://www.mitacs.ca/our-innovation-insights/transforming-ultrasound-access-in-remote-communities/?utm_content=358333659&utm_medium=social&utm_source=linkedin&hss_channel=lcp-118745" target="_blank" rel="noopener noreferrer" aria-label="Open Mitacs in a new tab">
+          <img src="./images/mitacs.webp" alt="Mitacs" loading="lazy">
+        </a>
+      </div>
+
+      <div class="partner">
+        <a href="https://www.ept.ca/features/award-winning-ultrasound-system-is-a-mixed-reality/" target="_blank" rel="noopener noreferrer" aria-label="Open Page 4 in a new tab">
+          <img src="./images/ept.png" alt="Electronic Products and Technology Magazine" loading="lazy">
+        </a>
+      </div>
+
+      <div class="partner">
+        <a href="https://www.cbc.ca/listen/live-radio/1-110-daybreak-south/clip/16112225-theme-song-mining-songs-west-kootenay-drug-alert" target="_blank" rel="noopener noreferrer" aria-label="Open CBC Radio in a new tab">
+          <img src="./images/cbcradio.png" alt="CBC Radio" loading="lazy">
+        </a>
+      </div>
+
+      <div class="partner">
+        <a href="https://www.healthing.ca/technology/ultrasound-anywhere-virtual-reality-tool-aims-to-change-the-face-of-rural-healthcare-for-canadians" target="_blank" rel="noopener noreferrer" aria-label="Open Healthing.ca in a new tab">
+          <img src="./images/healthing.webp" alt="Healthing.ca" loading="lazy">
+        </a>
+      </div>
+
+      <div class="partner">
+        <a href="https://techcouver.com/2024/11/20/ubc-researcher-revolutionizes-remote-ultrasound-technology/" target="_blank" rel="noopener noreferrer" aria-label="Open Techouver in a new tab">
+          <img src="./images/techouver.png" alt="Techouver" loading="lazy">
+        </a>
+      </div>
+
+      <div class="partner">
+        <a href="https://www.canhealth.com/2024/11/20/bc-researcher-wins-award-for-remote-ultrasound/" target="_blank" rel="noopener noreferrer" aria-label="Open Canadian Healthcare Technology in a new tab">
+          <img src="./images/cht.png" alt="Canadian Healthcare Technology" loading="lazy">
+        </a>
+      </div>
+
+      <div class="partner">
+        <a href="https://canadiansme.ca/prestigious-mitacs-innovation-awards-celebrate-canadas-top-talent-for-breakthroughs-in-health-food-industry-water-treatment-and-more/" target="_blank" rel="noopener noreferrer" aria-label="Open Canadian SME in a new tab">
+          <img src="./images/sme.webp" alt="Canadian SME" loading="lazy">
+        </a>
+      </div>
+
+      <div class="partner">
+        <a href="https://www.vchri.ca/stories/2024/08/02/teleoperated-ultrasounds-bring-expert-care-rural-and-remote-communities" target="_blank" rel="noopener noreferrer" aria-label="Open VCH-RI in a new tab">
+          <img src="./images/vchri.png" alt="VCH-RI" loading="lazy">
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="reveal">
+    <h2>Contact</h2>
+    <p>Interested in a pilot, research partnership, or otherwise getting involved? <a href=mailto:dgblack@ece.ubc.ca style="color:black">Let's talk</a>.</p>
+  </section>
+
+  <footer class="site">
+    <div class="container">© <span id="year"></span> Guide Medical</div>
+    <div class="container" style="text-align:right;color:var(--muted)">Built for people • Privacy</div>
+  </footer>
+
+  <script>
+    // year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Smooth parallax using requestAnimationFrame
+    (function(){
+      const layers = Array.from(document.querySelectorAll('.parallax-layer'));
+      let latestScrollY = 0;
+      let ticking = false;
+
+      function onScroll(){
+        latestScrollY = window.scrollY || window.pageYOffset;
+        if(!ticking){
+          window.requestAnimationFrame(update);
+          ticking = true;
+        }
+      }
+
+      function update(){
+        layers.forEach(layer => {
+          const speed = parseFloat(layer.dataset.speed) || 0.1;
+          const offset = (latestScrollY * speed);
+          layer.style.transform = `translate3d(0, ${offset}px, 0)`;
+        });
+        ticking = false;
+      }
+
+      window.addEventListener('scroll', onScroll, {passive:true});
+      // initial
+      update();
+    })();
+
+    // Reveal on scroll
+    (function(){
+      const revealEls = document.querySelectorAll('.reveal');
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{
+          if(e.isIntersecting){
+            e.target.classList.add('visible');
+            io.unobserve(e.target);
+          }
+        });
+      },{threshold:0.12});
+      revealEls.forEach(el=>io.observe(el));
+    })();
+
+    // lightweight resize adapt for svg scaling
+    window.addEventListener('resize', ()=>{
+      // noop for now but reserved for advanced behaviours
+    });
+  </script>
+</body>
+</html>
