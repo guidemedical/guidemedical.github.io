@@ -303,6 +303,74 @@
         padding-bottom: 15px;
       }
     }
+
+    .contact-form {
+      max-width: 500px;
+      margin: 40px auto;
+      padding: 32px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.1);
+      font-family: sans-serif;
+    }
+
+    .contact-form h2 {
+      margin: 0 0 24px;
+      font-size: 1.5rem;
+      color: #111;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #444;
+      margin-bottom: 6px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      padding: 10px 14px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.2s;
+      outline: none;
+      font-family: sans-serif;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: #6366f1;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .contact-form button {
+      width: 100%;
+      padding: 12px;
+      background: #6366f1;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s;
+    }
+
+    .contact-form button:hover {
+      background: #4f46e5;
+    }
   </style>
 </head>
 
@@ -882,16 +950,26 @@
 
   <section id="contact" class="reveal">
     <h2>Contact</h2>
+    <p>Subscribe to <a href=https://telesonics.beehiiv.com/ style="color:black">our newsletter</a> for occasional updates.</p>
     <p>Interested in a pilot, research partnership, or otherwise getting involved? Let's talk:</p>
-    <form action="https://api.web3forms.com/submit" method="POST">
+    <form class="contact-form" action="https://api.web3forms.com/submit" method="POST">
+      <h2>Contact Us</h2>
       <input type="hidden" name="access_key" value="69225f7b-65fe-4bf1-b74d-ca77ea431236">
-      <input type="text" name="name" required>
-      <input type="email" name="email" required>
-      <textarea name="message" required></textarea>
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" placeholder="John Smith" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="john@example.com" required>
+      </div>
+      <div class="form-group">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" placeholder="How can we help?" required></textarea>
+      </div>
       <div class="h-captcha" data-captcha="true" data-size="compact"></div>
-      <button type="submit">Submit</button>
+      <button type="submit">Send Message</button>
     </form>
-    <p>Or subscribe to <a href=https://telesonics.beehiiv.com/ style="color:black">our newsletter</a> for occasional updates.</p>
   </section>
 
   <footer class="site">
