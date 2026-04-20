@@ -20,8 +20,8 @@
       Login successful.
     </h1>
 
-    <p style="color:var(--muted);font-size:0.9rem;line-height:1.6;font-weight:300;margin-bottom:2rem;">
-      You're signed in to Coact. You may now close this window and return to the app.
+    <p id="redirectStatus" style="color:var(--muted);font-size:0.9rem;line-height:1.6;font-weight:300;margin-bottom:2rem;">
+      You're signed in to Coact. Redirecting to app in <span id="countdown">3</span> seconds.
     </p>
 
     <button onclick="window.close()"
@@ -37,6 +37,72 @@
     </div>
 
   </div>
-
 </body>
+
+<script>
+(function () {
+    // Parse query params from Auth0 redirect
+    const params = new URLSearchParams(window.location.search);
+
+    const code = params.get("code");
+    const state = params.get("state");
+    const error = params.get("error");
+    const errorDescription = params.get("error_description");
+
+    const statusEl = document.getElementById("redirectStatus");
+
+    // Handle auth error
+    if (error) {
+        console.error("Auth error:", error, errorDescription);
+        statusEl.textContent = "Login failed.";
+        return;
+    }
+  
+    if (!code || !state) {
+      statusEl.textContent = "You're signed in to Coact. You may now close this window.";
+      return;
+    }
+
+    const countdownEl = document.getElementById("countdown");
+  
+    // Build deep link URL
+    const deepLink = new URL("coact://callback");
+
+    if (code) deepLink.searchParams.append("code", code);
+    if (state) deepLink.searchParams.append("state", state);
+
+    // Optional: pass error info too
+    if (error) deepLink.searchParams.append("error", error);
+    if (errorDescription) deepLink.searchParams.append("error_description", errorDescription);
+
+    // Redirect to native app
+    window.location.href = deepLink.toString();
+
+    let seconds = 3;
+
+    const interval = setInterval(() => {
+        seconds--;
+        if (countdownEl) countdownEl.textContent = seconds;
+
+        if (seconds <= 0) {
+            clearInterval(interval);
+
+            statusEl.textContent = "Redirecting now...";
+
+            // Attempt redirect
+            window.location.href = deepLink.toString();
+
+            // Fallback message if redirect fails
+            setTimeout(() => {
+                statusEl.innerHTML = `
+                    If nothing happened, 
+                    <a href="${deepLink}" style="color:inherit;text-decoration:underline;">
+                        click here to open the app
+                    </a>.
+                `;
+            }, 1500);
+        }
+    }, 1000);
+})();
+</script>
 </html>
