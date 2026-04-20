@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My Account – Coact</title>
+  <meta name="description" content="Your Coact account" />
+  <link rel="stylesheet" href="coact.css" />
+</head>
+<body>
+
+  <!-- Header (copied from index.html) -->
+  <header class="container">
+    <a class="brand" href="/">
+      <div class="logo">
+        <img src="./images/logoText.png"
+             alt="Coact Technologies logo"
+             style="width:100%;height:100%;object-fit:contain;" />
+      </div>
+    </a>
+
+    <button class="nav-toggle"
+            aria-label="Toggle menu"
+            onclick="document.body.classList.toggle('menu-open')">
+      ☰
+    </button>
+
+    <nav class="nav-links">
+      <a href="/#issue">The Problem</a>
+      <a href="/#solution">Solution</a>
+      <a href="/#research">Research</a>
+      <a href="/#media">Media</a>
+      <a href="/#team">Team</a>
+      <a class="cta" href="/#contact">Contact</a>
+    </nav>
+
+    <div class="account-menu">
+      <button class="account-btn" aria-label="Account">
+        <svg viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M4 20c0-3.314 3.582-6 8-6s8 2.686 8 6"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="container" style="max-width:720px">
+    <h2>My Account</h2>
+    <p class="muted">Your personal information.</p>
+
+    <div class="panel" style="padding:24px;margin-top:18px">
+      <form id="account-form">
+
+        <div class="field">
+          <label for="full_name">Full name</label>
+          <input id="full_name"
+                 name="full_name"
+                 type="text"
+                 placeholder="Your name"
+                 disabled />
+        </div>
+
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email"
+                 name="email"
+                 type="email"
+                 placeholder="you@example.com"
+                 disabled />
+        </div>
+
+        <div class="field">
+          <label for="license_status">License status</label>
+          <input id="license_status" type="text" disabled />
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="license_num_sessions">Concurrent sessions allowed</label>
+            <input id="license_num_sessions" type="text" disabled />
+          </div>
+
+          <div class="field">
+            <label for="num_current">Currently active sessions</label>
+            <input id="num_current" type="text" disabled />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="license_expires">License expiry</label>
+          <input id="license_expires" type="text" disabled />
+        </div>
+
+        <div id="status"
+             class="alert"
+             style="margin-top:12px"></div>
+
+      </form>
+
+      <div style="margin-top:20px;display:flex;justify-content:flex-end">
+        <button id="logout-btn" class="btn-secondary" type="button">
+          Log out
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="site">
+    <div class="container">
+      © <span id="year"></span> Coact Technologies
+    </div>
+    <div class="container" style="text-align:right">
+      Built for people • Privacy
+    </div>
+  </footer>
+
+<script>
+  document.getElementById('year').textContent =
+    new Date().getFullYear();
+
+  const form = document.getElementById('account-form');
+  const statusEl = document.getElementById('status');
+  let userExists = true;
+  let saveTimer = null;
+
+  function showStatus(msg, type = 'success') {
+    statusEl.textContent = msg;
+    statusEl.className = `alert visible ${type}`;
+  }
+
+  const expiresField = document.getElementById('license_expires');
+
+  function formatExpiry(ts) {
+    if (!ts) return '—';
+    return new Date(ts).toLocaleDateString(undefined, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  }
+
+  async function loadUser() {
+    const res = await fetch('https://api.coact.ca/me', {
+      credentials: 'include'
+    });
+
+    if (res.status === 404) {
+      userExists = false;
+      enableFields();
+      showStatus('Welcome! Please confirm your details.', 'success');
+      return;
+    }
+
+    if (!res.ok) {
+      showStatus('Failed to load user data', 'error');
+      return;
+    }
+
+    const user = await res.json();
+
+    form.full_name.value = user.full_name || '';
+    form.email.value = user.email || '';
+
+    document.getElementById('license_status').value =
+      user.license_status || 'none';
+
+    document.getElementById('license_num_sessions').value =
+      user.license_num_sessions ?? '0';
+
+    document.getElementById('num_current').value =
+      user.num_current ?? '0';
+
+    expiresField.value = formatExpiry(user.license_expires);
+
+    enableFields();
+  }
+
+  function enableFields() {
+    Array.from(form.elements).forEach(el => {
+      if (el.tagName === 'INPUT') {
+        el.disabled = false;
+      }
+    });
+  }
+
+  async function saveUser() {
+    if (userExists) {
+      // /newuser only creates users; skip if already created
+      showStatus('Profile loaded.', 'success');
+      return;
+    }
+
+    const body = {
+      full_name: form.full_name.value,
+      email: form.email.value
+    };
+
+    const res = await fetch('https://api.coact.ca/newuser', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify(body)
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      showStatus(err.error || 'Failed to save user', 'error');
+      return;
+    }
+
+    userExists = true;
+    showStatus('Profile saved.', 'success');
+  }
+
+  // Debounced auto-save on change
+  form.addEventListener('input', () => {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveUser, 600);
+  });
+
+  loadUser();
+
+  document.getElementById('logout-btn').addEventListener('click', () => {
+    window.location.href = 'https://api.coact.ca/logout';
+  });
+</script>
+
+</body>
+</html>
