@@ -75,9 +75,6 @@
     if (error) deepLink.searchParams.append("error", error);
     if (errorDescription) deepLink.searchParams.append("error_description", errorDescription);
 
-    // Redirect to native app
-    window.location.href = deepLink.toString();
-
     let seconds = 3;
 
     const interval = setInterval(() => {
