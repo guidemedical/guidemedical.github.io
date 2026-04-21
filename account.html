@@ -73,7 +73,7 @@ const auth0Config = {
   useRefreshTokens: true,
 
   authorizationParams: {
-    redirect_uri: window.location.origin + '/account.html',
+    redirect_uri: window.location.origin,
     audience: 'https://api.coact.ca',
     scope: 'openid profile email offline_access'
   }
@@ -85,13 +85,13 @@ let accessToken;
 /*****************************************************************
  * AUTH FLOW
  *****************************************************************/
-(async () => {
+window.addEventListener("load", async () => {
   auth0 = await createAuth0Client(auth0Config);
 
   // Handle redirect callback
-  if (window.location.search.includes('code=')) {
+  if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
     await auth0.handleRedirectCallback();
-    window.history.replaceState({}, document.title, '/account.html');
+    window.history.replaceState({}, document.title, window.location.pathname);
   }
 
   // Force login
@@ -112,7 +112,7 @@ let accessToken;
   document.getElementById('email').value = user.email || '';
 
   loadUserFromAPI();
-})();
+});
 
 /*****************************************************************
  * BACKEND API
