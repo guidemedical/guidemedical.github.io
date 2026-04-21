@@ -179,7 +179,7 @@ async function apiFetch(path, options = {}) {
 async function loadUserFromAPI() {
   const res = await apiFetch('/me');
 
-  if (res.status === 404) {
+  if (res.status === 400) {
     showStatus('Welcome! Please confirm your details.', 'success');
     enableFields();
     return;
@@ -207,7 +207,7 @@ function enableFields() {
 }
 
 function showStatus(msg, type) {
-  const el = fields.status;
+  const el = document.getElementById('status');
   el.textContent = msg;
   el.className = `alert visible ${type}`;
 }
