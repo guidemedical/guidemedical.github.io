@@ -167,7 +167,7 @@ function showStatus(msg, type) {
  * LOGOUT (CLEARS REFRESH TOKENS)
  *****************************************************************/
 document.getElementById('logout-btn').onclick = () => {
-  auth0.logout({
+  auth0Client.logout({
     logoutParams: {
       returnTo: window.location.origin
     }
