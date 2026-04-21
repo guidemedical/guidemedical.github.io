@@ -73,7 +73,7 @@ const auth0Config = {
   useRefreshTokens: true,
 
   authorizationParams: {
-    redirect_uri: window.location.origin,
+    redirect_uri: window.location.origin + '/account.html',
     audience: 'https://api.coact.ca',
     scope: 'openid profile email offline_access'
   }
