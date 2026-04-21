@@ -6,229 +6,173 @@
   <title>My Account – Coact</title>
   <meta name="description" content="Your Coact account" />
   <link rel="stylesheet" href="coact.css" />
+
+  <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
 </head>
 <body>
 
-  <!-- Header (copied from index.html) -->
-  <header class="container">
-    <a class="brand" href="/">
-      <div class="logo">
-        <img src="./images/logoText.png"
-             alt="Coact Technologies logo"
-             style="width:100%;height:100%;object-fit:contain;" />
+<header class="container">
+  <a class="brand" href="/">
+    <div class="logo">
+      <img src="./images/logoText.png" alt="Coact Technologies logo" />
+    </div>
+  </a>
+</header>
+
+<main class="container" style="max-width:720px">
+  <h2>My Account</h2>
+  <p class="muted">Your personal information.</p>
+
+  <div class="panel" style="padding:24px;margin-top:18px">
+    <form id="account-form">
+      <div class="field">
+        <label>Full name</label>
+        <input id="full_name" disabled />
       </div>
-    </a>
-
-    <button class="nav-toggle"
-            aria-label="Toggle menu"
-            onclick="document.body.classList.toggle('menu-open')">
-      ☰
-    </button>
-
-    <nav class="nav-links">
-      <a href="/#issue">The Problem</a>
-      <a href="/#solution">Solution</a>
-      <a href="/#research">Research</a>
-      <a href="/#media">Media</a>
-      <a href="/#team">Team</a>
-      <a class="cta" href="/#contact">Contact</a>
-    </nav>
-
-    <div class="account-menu">
-      <button class="account-btn" aria-label="Account">
-        <svg viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.6"/>
-          <path d="M4 20c0-3.314 3.582-6 8-6s8 2.686 8 6"
-                stroke="currentColor"
-                stroke-width="1.6"
-                stroke-linecap="round"/>
-        </svg>
-      </button>
-    </div>
-  </header>
-
-  <!-- Main content -->
-  <main class="container" style="max-width:720px">
-    <h2>My Account</h2>
-    <p class="muted">Your personal information.</p>
-
-    <div class="panel" style="padding:24px;margin-top:18px">
-      <form id="account-form">
-
-        <div class="field">
-          <label for="full_name">Full name</label>
-          <input id="full_name"
-                 name="full_name"
-                 type="text"
-                 placeholder="Your name"
-                 disabled />
-        </div>
-
-        <div class="field">
-          <label for="email">Email</label>
-          <input id="email"
-                 name="email"
-                 type="email"
-                 placeholder="you@example.com"
-                 disabled />
-        </div>
-
-        <div class="field">
-          <label for="license_status">License status</label>
-          <input id="license_status" type="text" disabled />
-        </div>
-
-        <div class="field-row">
-          <div class="field">
-            <label for="license_num_sessions">Concurrent sessions allowed</label>
-            <input id="license_num_sessions" type="text" disabled />
-          </div>
-
-          <div class="field">
-            <label for="num_current">Currently active sessions</label>
-            <input id="num_current" type="text" disabled />
-          </div>
-        </div>
-
-        <div class="field">
-          <label for="license_expires">License expiry</label>
-          <input id="license_expires" type="text" disabled />
-        </div>
-
-        <div id="status"
-             class="alert"
-             style="margin-top:12px"></div>
-
-      </form>
-
-      <div style="margin-top:20px;display:flex;justify-content:flex-end">
-        <button id="logout-btn" class="btn-secondary" type="button">
-          Log out
-        </button>
+      <div class="field">
+        <label>Email</label>
+        <input id="email" disabled />
       </div>
+      <div class="field">
+        <label>License status</label>
+        <input id="license_status" disabled />
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Concurrent sessions</label>
+          <input id="license_num_sessions" disabled />
+        </div>
+        <div class="field">
+          <label>Active sessions</label>
+          <input id="num_current" disabled />
+        </div>
+      </div>
+      <div class="field">
+        <label>License expiry</label>
+        <input id="license_expires" disabled />
+      </div>
+      <div id="status" class="alert"></div>
+    </form>
 
+    <div style="margin-top:20px;text-align:right">
+      <button id="logout-btn" class="btn-secondary">Log out</button>
     </div>
-  </main>
-
-  <footer class="site">
-    <div class="container">
-      © <span id="year"></span> Coact Technologies
-    </div>
-    <div class="container" style="text-align:right">
-      Built for people • Privacy
-    </div>
-  </footer>
+  </div>
+</main>
 
 <script>
-  document.getElementById('year').textContent =
-    new Date().getFullYear();
+/*****************************************************************
+ * AUTH0 CONFIG (REFRESH TOKEN ENABLED)
+ *****************************************************************/
+const auth0Config = {
+  domain: 'auth.coact.ca',
+  clientId: 'PnUGLA2LRadsgi0rwSdWQUEoTM6xAhxT',
 
-  const form = document.getElementById('account-form');
-  const statusEl = document.getElementById('status');
-  let userExists = true;
-  let saveTimer = null;
+  // Enables rotating refresh tokens
+  cacheLocation: 'localstorage',
+  useRefreshTokens: true,
 
-  function showStatus(msg, type = 'success') {
-    statusEl.textContent = msg;
-    statusEl.className = `alert visible ${type}`;
+  authorizationParams: {
+    redirect_uri: window.location.origin + '/account.html',
+    audience: 'https://api.coact.ca',
+    scope: 'openid profile email offline_access'
+  }
+};
+
+let auth0;
+let accessToken;
+
+/*****************************************************************
+ * AUTH FLOW
+ *****************************************************************/
+(async () => {
+  auth0 = await createAuth0Client(auth0Config);
+
+  // Handle redirect callback
+  if (window.location.search.includes('code=')) {
+    await auth0.handleRedirectCallback();
+    window.history.replaceState({}, document.title, '/account.html');
   }
 
-  const expiresField = document.getElementById('license_expires');
-
-  function formatExpiry(ts) {
-    if (!ts) return '—';
-    return new Date(ts).toLocaleDateString(undefined, {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
+  // Force login
+  if (!await auth0.isAuthenticated()) {
+    return auth0.loginWithRedirect();
   }
 
-  async function loadUser() {
-    const res = await fetch('https://api.coact.ca/me', {
-      credentials: 'include'
-    });
-
-    if (res.status === 404) {
-      userExists = false;
-      enableFields();
-      showStatus('Welcome! Please confirm your details.', 'success');
-      return;
+  // Silently refresh access token when expired
+  accessToken = await auth0.getTokenSilently({
+    authorizationParams: {
+      audience: 'https://api.coact.ca'
     }
+  });
 
-    if (!res.ok) {
-      showStatus('Failed to load user data', 'error');
-      return;
+  const user = await auth0.getUser();
+
+  document.getElementById('full_name').value = user.name || '';
+  document.getElementById('email').value = user.email || '';
+
+  loadUserFromAPI();
+})();
+
+/*****************************************************************
+ * BACKEND API
+ *****************************************************************/
+async function apiFetch(path, options = {}) {
+  return fetch(`https://api.coact.ca${path}`, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${accessToken}`
     }
+  });
+}
 
-    const user = await res.json();
+async function loadUserFromAPI() {
+  const res = await apiFetch('/me');
 
-    form.full_name.value = user.full_name || '';
-    form.email.value = user.email || '';
-
-    document.getElementById('license_status').value =
-      user.license_status || 'none';
-
-    document.getElementById('license_num_sessions').value =
-      user.license_num_sessions ?? '0';
-
-    document.getElementById('num_current').value =
-      user.num_current ?? '0';
-
-    expiresField.value = formatExpiry(user.license_expires);
-
+  if (res.status === 404) {
+    showStatus('Welcome! Please confirm your details.', 'success');
     enableFields();
+    return;
   }
 
-  function enableFields() {
-    Array.from(form.elements).forEach(el => {
-      if (el.tagName === 'INPUT') {
-        el.disabled = false;
-      }
-    });
+  if (!res.ok) {
+    showStatus('Failed to load account', 'error');
+    return;
   }
 
-  async function saveUser() {
-    if (userExists) {
-      // /newuser only creates users; skip if already created
-      showStatus('Profile loaded.', 'success');
-      return;
+  const user = await res.json();
+
+  license_status.value = user.license_status || 'none';
+  license_num_sessions.value = user.license_num_sessions ?? 0;
+  num_current.value = user.num_current ?? 0;
+  license_expires.value = user.license_expires
+    ? new Date(user.license_expires).toLocaleDateString()
+    : '—';
+
+  enableFields();
+}
+
+function enableFields() {
+  document.querySelectorAll('input').forEach(i => i.disabled = false);
+}
+
+function showStatus(msg, type) {
+  const el = document.getElementById('status');
+  el.textContent = msg;
+  el.className = `alert visible ${type}`;
+}
+
+/*****************************************************************
+ * LOGOUT (CLEARS REFRESH TOKENS)
+ *****************************************************************/
+document.getElementById('logout-btn').onclick = () => {
+  auth0.logout({
+    logoutParams: {
+      returnTo: window.location.origin
     }
-
-    const body = {
-      full_name: form.full_name.value,
-      email: form.email.value
-    };
-
-    const res = await fetch('https://api.coact.ca/newuser', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify(body)
-    });
-
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      showStatus(err.error || 'Failed to save user', 'error');
-      return;
-    }
-
-    userExists = true;
-    showStatus('Profile saved.', 'success');
-  }
-
-  // Debounced auto-save on change
-  form.addEventListener('input', () => {
-    clearTimeout(saveTimer);
-    saveTimer = setTimeout(saveUser, 600);
   });
-
-  loadUser();
-
-  document.getElementById('logout-btn').addEventListener('click', () => {
-    window.location.href = 'https://api.coact.ca/logout';
-  });
+};
 </script>
-
 </body>
 </html>
