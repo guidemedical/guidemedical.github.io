@@ -79,34 +79,34 @@ const auth0Config = {
   }
 };
 
-let auth0;
+let auth0Client;
 let accessToken;
 
 /*****************************************************************
  * AUTH FLOW
  *****************************************************************/
 window.addEventListener("load", async () => {
-  auth0 = await createAuth0Client(auth0Config);
+  auth0Client = await window.auth0.createAuth0Client(auth0Config);
 
   // Handle redirect callback
   if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
-    await auth0.handleRedirectCallback();
+    await auth0Client.handleRedirectCallback();
     window.history.replaceState({}, document.title, window.location.pathname);
   }
 
   // Force login
-  if (!await auth0.isAuthenticated()) {
-    return auth0.loginWithRedirect();
+  if (!await auth0Client.isAuthenticated()) {
+    return auth0Client.loginWithRedirect();
   }
 
   // Silently refresh access token when expired
-  accessToken = await auth0.getTokenSilently({
+  accessToken = await auth0Client.getTokenSilently({
     authorizationParams: {
       audience: 'https://api.coact.ca'
     }
   });
 
-  const user = await auth0.getUser();
+  const user = await auth0Client.getUser();
 
   document.getElementById('full_name').value = user.name || '';
   document.getElementById('email').value = user.email || '';
