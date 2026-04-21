@@ -9,6 +9,13 @@
 
   <script defer src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
 </head>
+
+<style>
+  body {
+    visibility: hidden;
+  }
+</style>
+
 <body>
 
 <header class="container">
@@ -53,7 +60,9 @@
       </div>
       <div id="status" class="alert"></div>
     </form>
-
+    <div style="margin-top:20px;text-align:right">
+      <button id="save-btn" class="btn-secondary" disabled>Save Changes</button>
+    </div>
     <div style="margin-top:20px;text-align:right">
       <button id="logout-btn" class="btn-secondary">Log out</button>
     </div>
@@ -79,8 +88,44 @@ const auth0Config = {
   }
 };
 
+const fields = {
+  fullName: document.getElementById("full_name"),
+  email: document.getElementById("email"),
+  licenseStatus: document.getElementById("license_status"),
+  licenseNumSessions: document.getElementById("license_num_sessions"),
+  numCurrent: document.getElementById("num_current"),
+  licenseExpires: document.getElementById("license_expires"),
+};
+
 let auth0Client;
 let accessToken;
+let originalData = {};
+
+function snapshotForm() {
+  originalData = {
+    full_name: fields.fullName.value,
+    email: fields.email.value,
+    license_status: fields.licenseStatus.value,
+    license_num_sessions: fields.licenseNumSessions.value,
+    num_current: fields.numCurrent.value,
+    license_expires: fields.licenseExpires.value
+  };
+}
+
+function hasChanges() {
+  return (
+    fields.fullName.value !== originalData.full_name ||
+    fields.email.value !== originalData.email ||
+    fields.licenseStatus.value !== originalData.license_status ||
+    fields.licenseNumSessions.value !== originalData.license_num_sessions ||
+    fields.numCurrent.value !== originalData.num_current ||
+    fields.licenseExpires.value !== originalData.license_expires
+  );
+}
+
+function updateSaveButton() {
+  document.getElementById('save-btn').disabled = !hasChanges();
+}
 
 /*****************************************************************
  * AUTH FLOW
@@ -108,10 +153,14 @@ window.addEventListener("load", async () => {
 
   const user = await auth0Client.getUser();
 
-  document.getElementById('full_name').value = user.name || '';
-  document.getElementById('email').value = user.email || '';
-
+  document.body.style.visibility = "visible";
+  fields.email.value = user.email || '';
   loadUserFromAPI();
+  snapshotForm();
+
+  document.querySelectorAll("input").forEach(input => {
+    input.addEventListener("input", updateSaveButton);
+  });
 });
 
 /*****************************************************************
@@ -143,29 +192,26 @@ async function loadUserFromAPI() {
 
   const user = await res.json();
 
-  license_status.value = user.license_status || 'none';
-  license_num_sessions.value = user.license_num_sessions ?? 0;
-  num_current.value = user.num_current ?? 0;
-  license_expires.value = user.license_expires
-    ? new Date(user.license_expires).toLocaleDateString()
-    : '—';
+  fields.full_name.value = user.full_name || '';
+  fields.license_status.value = user.license_status || '';
+  fields.license_num_sessions.value = user.license_num_sessions || 0;
+  fields.num_current.value = user.num_current || 0;
+  fields.license_expires.value = new Date(user.license_expires).toLocaleDateString() || '-';
 
   enableFields();
 }
 
 function enableFields() {
-  document.querySelectorAll('input').forEach(i => i.disabled = false);
+  //fields.email.disabled = false;
+  fields.fullName.disabled = false;
 }
 
 function showStatus(msg, type) {
-  const el = document.getElementById('status');
+  const el = fields.status;
   el.textContent = msg;
   el.className = `alert visible ${type}`;
 }
 
-/*****************************************************************
- * LOGOUT (CLEARS REFRESH TOKENS)
- *****************************************************************/
 document.getElementById('logout-btn').onclick = () => {
   auth0Client.logout({
     logoutParams: {
@@ -173,6 +219,29 @@ document.getElementById('logout-btn').onclick = () => {
     }
   });
 };
+
+document.getElementById("save-btn").addEventListener("click", async () => {
+  const payload = {
+    full_name: fields.fullName.value,
+    email: fields.email.value,
+  };
+
+  const res = await apiFetch("/newuser", {
+    method: "POST",
+    body: JSON.stringify(payload)
+  });
+
+  if (!res.ok) {
+    showStatus("Failed to save", "error");
+    return;
+  }
+
+  showStatus("Saved successfully", "success");
+
+  // Reset baseline so button disables again
+  snapshotForm();
+  updateSaveButton();
+});
 </script>
 </body>
 </html>
