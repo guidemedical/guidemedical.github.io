@@ -158,9 +158,7 @@ window.addEventListener("load", async () => {
   loadUserFromAPI();
   snapshotForm();
 
-  document.querySelectorAll("input").forEach(input => {
-    input.addEventListener("input", updateSaveButton);
-  });
+  document.getElementById('save-btn').disabled = true;
 });
 
 /*****************************************************************
@@ -192,11 +190,11 @@ async function loadUserFromAPI() {
 
   const user = await res.json();
 
-  fields.full_name.value = user.full_name || '';
-  fields.license_status.value = user.license_status || '';
-  fields.license_num_sessions.value = user.license_num_sessions || 0;
-  fields.num_current.value = user.num_current || 0;
-  fields.license_expires.value = new Date(user.license_expires).toLocaleDateString() || '-';
+  fields.fullName.value = user.full_name || '';
+  fields.licenseStatus.value = user.license_status || '';
+  fields.licenseNumSessions.value = user.license_num_sessions || 0;
+  fields.num_Current.value = user.num_current || 0;
+  fields.licenseExpires.value = new Date(user.license_expires).toLocaleDateString() || '-';
 
   enableFields();
 }
@@ -211,6 +209,10 @@ function showStatus(msg, type) {
   el.textContent = msg;
   el.className = `alert visible ${type}`;
 }
+
+document.querySelectorAll("input").forEach(input => {
+    input.addEventListener("input", updateSaveButton);
+  });
 
 document.getElementById('logout-btn').onclick = () => {
   auth0Client.logout({
