@@ -194,7 +194,7 @@ async function loadUserFromAPI() {
   fields.licenseStatus.value = user.license_status || '';
   fields.licenseNumSessions.value = user.license_num_sessions || 0;
   fields.numCurrent.value = user.num_current || 0;
-  fields.licenseExpires.value = new Date(user.license_expires).toLocaleDateString() || '-';
+  fields.licenseExpires.value = new Date(user.license_expires * 1000).toLocaleDateString() || '-';
 
   enableFields();
 }
