@@ -131,34 +131,46 @@ function updateSaveButton() {
  * AUTH FLOW
  *****************************************************************/
 window.addEventListener("load", async () => {
-  auth0Client = await window.auth0.createAuth0Client(auth0Config);
-
-  // Handle redirect callback
-  if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
-    await auth0Client.handleRedirectCallback();
-    window.history.replaceState({}, document.title, window.location.pathname);
-  }
-
-  // Force login
-  if (!await auth0Client.isAuthenticated()) {
-    return auth0Client.loginWithRedirect();
-  }
-
-  // Silently refresh access token when expired
-  accessToken = await auth0Client.getTokenSilently({
-    authorizationParams: {
-      audience: 'https://api.coact.ca'
+  try {
+    auth0Client = await window.auth0.createAuth0Client(auth0Config);
+  
+    // Handle redirect callback
+    if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
+      await auth0Client.handleRedirectCallback();
+      window.history.replaceState({}, document.title, window.location.pathname);
     }
-  });
 
-  const user = await auth0Client.getUser();
+    // Force login
+    if (!await auth0Client.isAuthenticated()) {
+      return auth0Client.loginWithRedirect();
+    }
+  
+    // Silently refresh access token when expired
+    accessToken = await auth0Client.getTokenSilently({
+      authorizationParams: {
+        audience: 'https://api.coact.ca'
+      }
+    });
 
-  document.body.style.visibility = "visible";
-  fields.email.value = user.email || '';
-  loadUserFromAPI();
-  snapshotForm();
+    const user = await auth0Client.getUser();
 
-  document.getElementById('save-btn').disabled = true;
+    document.body.style.visibility = "visible";
+    fields.email.value = user.email || '';
+    loadUserFromAPI();
+    snapshotForm();
+
+    document.getElementById('save-btn').disabled = true;
+  } catch (err) {
+    console.error("Auth error:", err);
+    // Clear any stale Auth0 state and force a fresh login
+    try {
+      localStorage.clear(); // or selectively clear Auth0 keys
+      await auth0Client.loginWithRedirect();
+    } catch {
+      // Last resort — show the page so the user isn't stuck on a blank screen
+      document.body.style.visibility = "visible";
+    }
+  }
 });
 
 /*****************************************************************
