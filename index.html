@@ -8,6 +8,35 @@
   <meta name="theme-color" content="#0B6E4F" />
 
   <link rel="stylesheet" href="coact.css" />
+
+  <style>
+    /* Solution section */
+    .sol-lead { font-size: clamp(28px, 4.5vw, 44px); font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; color: var(--accent); margin: 4px 0 10px; }
+    section p.sol-sub { font-size: 19px; max-width: 620px; }
+    .how { display: grid; grid-template-columns: 1fr 140px 1fr; gap: 16px; align-items: center; margin-top: 32px; }
+    .how-card { position: relative; background: white; border-radius: 16px; box-shadow: var(--shadow); padding: 16px 18px 18px; transition: transform .2s ease; }
+    .how-card:hover { transform: translateY(-4px); }
+    .how-card img { width: 100%; height: 240px; object-fit: contain; border-radius: 10px; margin-bottom: 12px; }
+    .how-card h3 { margin: 0 0 4px; font-size: 20px; }
+    .how-card p { margin: 0; }
+    .how-step { position: absolute; top: 12px; left: 12px; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: white; font-weight: 700; }
+    .how-link { display: flex; flex-direction: column; align-items: center; gap: 6px; color: var(--accent-2); }
+    .how-link svg { width: 56px; margin-bottom: 4px; }
+    .how-link span { font-size: 13px; font-weight: 600; padding: 3px 10px; border-radius: 999px; background: var(--accent-tint); }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 28px; }
+    .stat { background: white; border-radius: 14px; box-shadow: var(--shadow-sm); padding: 18px 16px; text-align: center; }
+    .stat strong { display: block; font-size: 26px; color: var(--accent); line-height: 1.2; }
+    .stat span { display: block; color: var(--muted); font-size: 14px; margin-top: 4px; }
+    section p.sol-proof { margin-top: 24px; text-align: center; max-width: none; }
+    .sol-proof a { color: var(--accent-2); font-weight: 600; text-decoration: none; white-space: nowrap; }
+    .sol-proof a:hover { text-decoration: underline; }
+    @media (max-width: 760px) {
+      .how { grid-template-columns: 1fr; }
+      .how-link { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+      .how-link svg { transform: rotate(90deg); width: 36px; margin: 0 4px 0 0; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
 </head>
 
 <body>
@@ -102,11 +131,11 @@
         <div class="hero-copy">
           <!--<span class="eyebrow"><div class="small-logo"><img src="./images/logoText.png" alt="Guide Medical logo" style="width:100%;height:100%;object-fit:contain;"/></div></span>-->
           <h1 class="hero-title">Accessible expert ultrasound, anywhere.</h1>
-          <p class="hero-lead">Bring expert ultrasound diagnostics to rural settings through our patent-pending mixed reality system without anyone needing to travel.</p>
+          <p class="hero-lead">Bring expert ultrasound diagnostics to rural settings through our patented mixed reality system without anyone needing to travel.</p>
 
           <div class="hero-cta">
             <button class="btn btn--solid" onclick="window.location.href='#solution'">Our Solution</button>
-            <button class="btn btn--ghost" onclick="window.location.href='#contact'">Subscribe</button>
+            <button class="btn btn--ghost" onclick="window.location.href='#contact'">Get in touch</button>
             <div class="logo-panel-small">
               <img src="./images/logo.png" style="width:40px;"/>
             </div>
@@ -123,7 +152,7 @@
   <!-- CONTENT SECTIONS WITH PARALLAX MEDIA PANELS -->
   <section id="issue" class="reveal">
     <h2>The Problem</h2>
-    <p>Diagnostic ultrasound is used in every branch of medicine, yet rural communities have little to no access. This impacts about 2 in 5 people globally. The only practical solution used today is for patients to travel for scans. This means time away from work and family, facing the risks and environmental impact of travel, and it costs healthcare systems billions of dollars per year. The tele-ultrasound market is estimated to be worth $100 billion (USD), but current solutions do not solve the problem. Video guidance is too imprecise and imprecise while robotics is too complex, expensive, and inflexible.</p>
+    <p>Diagnostic ultrasound is used in every branch of medicine, yet rural communities have little to no access. This impacts about 2 in 5 people globally. The only practical solution used today is for patients to travel for scans. This means time away from work and family, facing the risks and environmental impact of travel, and it costs healthcare systems billions of dollars per year. The tele-ultrasound market is estimated to be worth $100 billion (USD), but current solutions do not solve the problem. Video guidance is too imprecise and inefficient while robotics is too complex, expensive, and inflexible.</p>
     <!-- <div class="panel panel--media" style="margin-top:18px;background-image:linear-gradient(120deg, rgba(2,18,45,0.08), rgba(6,34,75,0.04)), url('./images/coverImg.png')"></div> -->
     <div class="panel panel--media" style="margin-top:18px">
       <img src="./images/cover.jpg" style="max-height:100%;max-width:100%;border-radius:8px;"/>
@@ -132,68 +161,43 @@
 
   <section id="solution" class="reveal">
     <h2>Solution</h2>
-    <p>Coact Technologies is addressing the problem of ultrasound access by enabling expert ultrasound guidance in remote communities. Our system bridges the gap between robotics and video guidance, providing a solution that is simultaneously easy-to-use, low-cost, and flexible, while giving the physician precise control and immersive feedback.</p>
-    <p>We use a patent-pending combination of real-time hand-over-hand augmented reality guidance with high-speed communication and force feedback to give the expert the sensation of performing a scan in person while in fact they are guiding the motions of a novice person in a remote location.</p>
-    <p>Our approach is based on hundreds of conversations with physicians, health authorities, remote and Indigenous communities, and industry experts, and has been validating in award-winning published research.</p>
-    <div class="split" style="margin-top:18px">
-      <div>
-        <div class="panel" style="padding:22px">
-          <h3>At a glance</h3>
-          <p>The novice person wears a mixed reality headset and aligns their real ultrasound probe with a virtual one. The motion of the virtual one is controlled in real time by a remote expert, who manipulates a haptic input device. They see the live-streamed video and ultrasound, communicate verbally with the novice, and receive force feedback through the haptic device so it feels as if they are performing the scan in person.</p>
-          <ul>
-            <li>Cloud interface:
-            <ul>
-              <li>Secure, robust, end-to-end encrypted, ultra-fast, peer-to-peer connection between expert and follower</li>
-              <li>Two-way verbal communication</li>
-              <li>High-quality, low-latency video and ultrasound streaming</li>
-              <li>Advanced teleoperation algorithms</li>
-            </ul></li>
-            <li>Expert-side interface:
-            <ul>
-              <li>High definition video and ultrasound streams</li>
-              <li>Device-agnostic remote control of the ultrasound machine settings</li>
-              <li>Input device with ultrasound probe-like handle for sub-millimeter, sub-degree precision 6 degree-of-freedom input and realistic force feedback</li>
-            </ul></li>
-            <li>Patient-side system:
-            <ul>
-              <li>Compellingly intuitive mixed reality guidance system</li>
-              <li>Integrated transducer force, position, and orientation tracking and feedback</li>
-              <li>Patient specific modeling and feedback</li>
-              <li>AI assistance</li></li>
-            </ul>
-          </ul>
-        </div>
-      </div>
-      <div>
-        <div class="panel panel--media">
-          <img src="./images/followerSide.png" style="max-height:100%;max-width:100%;border-radius:8px;"/>
-        </div>
-      </div>
-    </div>
-    <div class="splitleft" style="margin-top:18px">
-      <div>
-        <div class="panel" style="padding:22px">
-          <h3>Key benefits</h3>
-          <ul>
-            <li>Intuitive and easy to use for expert and novice</li>
-            <li>Precise, real-time guidance for an efficient, high-quality scan</li>
-            <li>Easy, fast setup (less than 1 minute)</li>
-            <li>Completely flexible and mobile (one pair of smart glasses and a tablet)</li>
-            <li>Ultrasound probe agnostic for most point-of-care devices</li>
-            <li>No robot-related safety concerns</li>
-            <li>Massive cost savings compared to travel or robotics</li>
-          </ul>
-        </div>
-      </div>
-      <div>
-        <div class="panel panel--media">
-          <img src="./images/expertSide.png" style="max-height:100%;max-width:100%;border-radius:8px;"/>
-        </div>
-      </div>
-    </div>
-    <div class="videocard" style="margin-top:18px;height:400px">
+    <p class="sol-lead">An expert's eyes and hands, anywhere.</p>
+    <p class="sol-sub">A remote expert guides the hands of someone on site, in real time. It feels like scanning in person, with no travel and no robot.</p>
+
+    <div class="videocard" style="margin-top:24px;height:400px">
       <iframe src="https://www.youtube.com/embed/dUsZgLpHbgk?si=rVadje2hi1Neb6Jd" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" style="height:100%;width:auto;border-radius:8px;"></iframe>
     </div>
+
+    <div class="how">
+      <div class="how-card">
+        <img src="./images/expertSide.png" alt="Expert holding a probe-shaped haptic device beside live video and ultrasound" loading="lazy"/>
+        <span class="how-step">1</span>
+        <h3>The expert moves</h3>
+        <p>a probe-shaped handle. They see the scan, control the imaging, and feel the patient</p>
+      </div>
+      <div class="how-link" aria-hidden="true">
+        <span>Control</span>
+        <svg viewBox="0 0 48 16" fill="none"><path d="M2 8h42M36 2l8 6-8 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Voice</span><span>Touch</span><span>Position</span>
+        <svg viewBox="0 0 48 16" fill="none"><path d="M46 8H4M12 2L4 8l8 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Video</span><span>Ultrasound</span>
+      </div>
+      <div class="how-card">
+        <img src="./images/followerSide.png" alt="Person wearing mixed reality glasses aligning a real probe with a virtual one" loading="lazy"/>
+        <span class="how-step">2</span>
+        <h3>The person on site follows</h3>
+        <p>by aligning the ultrasound probe to a virtual one shown in smart glasses.</p>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><strong>&lt;&nbsp;1&nbsp;min</strong><span>to set up</span></div>
+      <div class="stat"><strong>mm-level</strong><span>precision</span></div>
+      <div class="stat"><strong>any probe</strong><span>ultrasound probe agnostic</span></div>
+      <div class="stat"><strong>no robot</strong><span>lower cost, more flexible</span></div>
+    </div>
+
+    <p class="sol-proof">Shaped by hundreds of conversations with clinicians and remote communities. <a href="#research">Proven in award-winning research&nbsp;&rarr;</a></p>
 
     <h2 style="margin-top:12px;">Partners and Sponsors</h2>
     <div class="gridpartner" role="list">
@@ -227,6 +231,82 @@
   <section id="research" class="reveal">
     <h2>Research</h2>
     <p>This venture was born in the Robotics and Control Laboratory at the University of British Columbia, Vancouver, Canada. We are carrying out extensive research on the technical system, instrumentation, control, human-computer interaction, vision, clinical feasibility, and more.</p>
+    
+    <h3>Awards:</h3>
+    <div class="hscroll-panel">
+      <div class="hscroll-inner">
+        <div class="card">
+          <h3>CAGS/ProQuest Distinguished Dissertation Award</h3>
+          <img src="./images/cags.png" alt="CAGS" loading="lazy" />
+          <div class="meta">
+            <div class="meta-title">Canadian Association for Graduate Studies</div>
+            <div class="meta-authors">2026</div>
+            <div class="meta-venue">Award for the best PhD thesis in Canada</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Governor General's Gold Medal</h3>
+          <img src="./images/gggm.jpg" alt="Governor General's Gold Medal" loading="lazy" />
+          <div class="meta">
+            <div class="meta-title">University of British Columbia</div>
+            <div class="meta-authors">2026</div>
+            <div class="meta-venue">Award for the best PhD. The highest academic award in Canada</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Mitacs Outstanding Innovation Award</h3>
+          <img src="./images/mitacsAward.jpg" alt="Mitacs Outstanding Innovation Award" loading="lazy" />
+          <div class="meta">
+            <div class="meta-title">Mitacs</div>
+            <div class="meta-authors">2024</div>
+            <div class="meta-venue">Prestigious award given to the most innovative of the thousands of projects funded by Mitacs in 2024</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Dean's Award for PhD Thesis</h3>
+          <img src="images/thesis.png" alt="Dean's Award" loading="lazy" />
+          <div class="meta">
+            <div class="meta-title">University of British Columbia</div>
+            <div class="meta-authors">2025</div>
+            <div class="meta-venue">Awarded for the best dissertation in engineering.</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Best Student Paper Award</h3>
+          <img src="./images/telepresenceAward.png" alt="Best paper award" loading="lazy" />
+          <div class="meta">
+            <div class="meta-title">IEEE International Conference on Telepresence</div>
+            <div class="meta-authors">2025</div>
+            <div class="meta-venue">Given to the best paper presented by a graduate student</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Best Paper Award</h3>
+          <img src="./images/hamlynAward.jpg" alt="Best paper award" loading="lazy" />
+          <div class="meta">
+            <div class="meta-title">Hamlyn Symposium for Medical Robotics</div>
+            <div class="meta-authors">2022</div>
+            <div class="meta-venue">Awarded for the best paper and presentation. Imperial College, London</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Technical Achievement Award</h3>
+          <img src="./images/mddc.png" alt="MDDC Award"/>
+          <div class="meta">
+            <div class="meta-title">BC Medical Device Design Centre</div>
+            <div class="meta-authors">2021</div>
+            <div class="meta-venue">Awarded after presentations to judges at the BC MDDC</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <h3>Papers:</h3>
     <div class="hscroll-panel">
       <div class="hscroll-inner">
@@ -320,7 +400,7 @@
 
         <div class="card">
           <h3>Human vs. Robotic Teleoperation</h3>
-          <a href="https://ieeexplore.ieee.org/abstract/document/10380799" target="_blank">
+          <a href="https://arxiv.org/abs/2511.07275" target="_blank">
             <img src="./images/robotFig.png" alt="Latency Evaluation" loading="lazy" />
           </a>
           <div class="meta">
@@ -449,85 +529,11 @@
       </div>
     </div>
 
-    <h3>Awards:</h3>
-    <div class="hscroll-panel">
-      <div class="hscroll-inner">
-        <div class="card">
-          <h3>CAGS/ProQuest Distinguished Dissertation Award</h3>
-          <img src="./images/cags.png" alt="CAGS" loading="lazy" />
-          <div class="meta">
-            <div class="meta-title">Canadian Association for Graduate Studies</div>
-            <div class="meta-authors">2026</div>
-            <div class="meta-venue">Award for the best PhD thesis in Canada</div>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>Governor General's Gold Medal</h3>
-          <img src="./images/gggm.jpg" alt="Governor General's Gold Medal" loading="lazy" />
-          <div class="meta">
-            <div class="meta-title">University of British Columbia</div>
-            <div class="meta-authors">2026</div>
-            <div class="meta-venue">Award for the best PhD. The highest academic award in Canada</div>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>Mitacs Outstanding Innovation Award</h3>
-          <img src="./images/mitacsAward.jpg" alt="Mitacs Outstanding Innovation Award" loading="lazy" />
-          <div class="meta">
-            <div class="meta-title">Mitacs</div>
-            <div class="meta-authors">2024</div>
-            <div class="meta-venue">Prestigious award given to the most innovative of the thousands of projects funded by Mitacs in 2024</div>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>Dean's Award for PhD Thesis</h3>
-          <img src="images/thesis.png" alt="Dean's Award" loading="lazy" />
-          <div class="meta">
-            <div class="meta-title">University of British Columbia</div>
-            <div class="meta-authors">2025</div>
-            <div class="meta-venue">Awarded for the best dissertation in engineering.</div>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>Best Student Paper Award</h3>
-          <img src="./images/telepresenceAward.png" alt="Best paper award" loading="lazy" />
-          <div class="meta">
-            <div class="meta-title">IEEE International Conference on Telepresence</div>
-            <div class="meta-authors">2025</div>
-            <div class="meta-venue">Given to the best paper presented by a graduate student</div>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>Best Paper Award</h3>
-          <img src="./images/hamlynAward.jpg" alt="Best paper award" loading="lazy" />
-          <div class="meta">
-            <div class="meta-title">Hamlyn Symposium for Medical Robotics</div>
-            <div class="meta-authors">2022</div>
-            <div class="meta-venue">Awarded for the best paper and presentation. Imperial College, London</div>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>Technical Achievment Award</h3>
-          <img src="./images/mddc.png" alt="MDDC Award"/>
-          <div class="meta">
-            <div class="meta-title">BC Medical Device Design Centre</div>
-            <div class="meta-authors">2021</div>
-            <div class="meta-venue">Awarded after presentations to judges at the BC MDDC</div>
-          </div>
-        </div>
-      </div>
-    </div>
     <h3>Patents:</h3>
     <p>Two US patents granted:</p>
     <ul>
-      <li><a href=https://patents.google.com/patent/US20230218270A1/en target="_blank" style="color:black">US20230218270A1</a></li>
-      <li><a href=https://patents.google.com/patent/US20240173018A1/en target="_blank" style="color:black">US20240173018A1</a></li>
+      <li><a href="https://patents.google.com/patent/US12582382B2/en" target="_blank" style="color:black">US12582382B2</a></li>
+      <li><a href="https://patents.google.com/patent/US12582388B2/en" target="_blank" style="color:black">US12582388B2</a></li>
     </ul>
   </section>
 
