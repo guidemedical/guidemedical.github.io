@@ -170,7 +170,7 @@
     <p class="sol-sub">A remote expert guides the hands of someone on site, in real time. It feels like scanning in person, with no travel and no robot.</p>
 
     <div class="sol-video">
-      <iframe src="https://www.youtube.com/embed/L1TcdasqV7s?autoplay=1&amp;mute=1&amp;playsinline=1&amp;loop=1&amp;playlist=L1TcdasqV7s" title="Coact Technologies demo" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      <iframe id="demo-video" data-src="https://www.youtube.com/embed/L1TcdasqV7s?autoplay=1&amp;mute=1&amp;playsinline=1&amp;loop=1&amp;playlist=L1TcdasqV7s&amp;enablejsapi=1" title="Coact Technologies demo" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
     </div>
 
     <div class="how">
@@ -723,6 +723,29 @@
       window.addEventListener('scroll', onScroll, {passive:true});
       // initial
       update();
+    })();
+
+    // Demo video: load and autoplay once scrolled into view, pause when scrolled away
+    (function(){
+      const video = document.getElementById('demo-video');
+      if(!video) return;
+      if(!('IntersectionObserver' in window)){ video.src = video.dataset.src; return; }
+
+      function command(func){
+        video.contentWindow.postMessage(JSON.stringify({event:'command', func, args:[]}), '*');
+      }
+
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{
+          if(e.isIntersecting){
+            if(!video.src) video.src = video.dataset.src;
+            else command('playVideo');
+          } else if(video.src){
+            command('pauseVideo');
+          }
+        });
+      },{threshold:0.5});
+      io.observe(video);
     })();
 
     // Reveal on scroll
